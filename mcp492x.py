@@ -25,10 +25,7 @@ class Mcp492xDac:
 
         cmd += data
 
-        print(bin(cmd))
-
         cmd_bytes = cmd.to_bytes(2, 'big')
-
         return self.chip.xfer(cmd_bytes)
 
 class Mcp492x:
@@ -42,9 +39,9 @@ class Mcp4921(Mcp492x):
         super().__init__(bus)
 
     def xfer(self, data):
-        raise "not implemented"
+        raise(NotImplementedError("I2C support is not implemented"))
 
-# MCP4921 is SPI version of MCP492x
+# MCP4922 is SPI version of MCP492x
 class Mcp4922(Mcp492x):
     def __init__(self, bus):
         super().__init__(bus)
