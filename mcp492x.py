@@ -20,10 +20,16 @@ class Mcp492xDac:
         cmd += ga_   << self.__BIT["GA_"]
         cmd += shdn_ << self.__BIT["SHDN_"]
 
-        cmd += data  << (self.__DATA_BITS - 1)
+        if (data > 2 ** (self.__DATA_BITS) - 1):
+            raise ValueError('Data out of range')
 
-        cmd_bytes = cmd.to_bytes
-        return self.chip.__xfer(cmd_bytes)
+        cmd += data
+
+        print(bin(cmd))
+
+        cmd_bytes = cmd.to_bytes(2, 'big')
+
+        return self.chip.xfer(cmd_bytes)
 
 class Mcp492x:
     def __init__(self, bus):
@@ -33,15 +39,15 @@ class Mcp492x:
 # MCP4921 is I2C version of MCP492x
 class Mcp4921(Mcp492x):
     def __init__(self, bus):
-        super.__init__
+        super().__init__(bus)
 
-    def __xfer(self, data):
+    def xfer(self, data):
         raise "not implemented"
 
 # MCP4921 is SPI version of MCP492x
 class Mcp4922(Mcp492x):
     def __init__(self, bus):
-        super.__init__
+        super().__init__(bus)
         
-    def __xfer(self, data):
+    def xfer(self, data):
         self.bus.xfer(data)
